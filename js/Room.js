@@ -4,11 +4,13 @@ var Room = function() {
   this.type = 'Room';
   this.difficalty = null;
   this.openingsOn = [];
+  this.isExit = null;
 
   this.create = function(config) {
     this.x = config.x;
     this.y = config.y;
     this.openingsOn = config.openingsOn;
+    this.exit = config.isExit;
   };
 
   this.setType = function(type) {
@@ -31,6 +33,10 @@ var Room = function() {
 
     var td = document.createElement('td');
     td.className = 'RoomCls '+this.type+'Cls'+' '+openingsClasses;
+
+    //var t = document.createTextNode(this.x+','+this.y);
+    //td.appendChild(t);
+
     return td;
   };
 };

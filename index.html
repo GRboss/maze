@@ -5,22 +5,60 @@
   <title>Maze</title>
   <link rel="stylesheet" type="text/css" href="css/maze.css">
   <script type="text/javascript" src="js/Utilities.js"></script>
+  <script type="text/javascript" src="js/MovingObject.js"></script>
+  <script type="text/javascript" src="js/Hero.js"></script>
   <script type="text/javascript" src="js/Room.js"></script>
   <script type="text/javascript" src="js/MarbleRoom.js"></script>
   <script type="text/javascript" src="js/DirtRoom.js"></script>
   <script type="text/javascript" src="js/MudRoom.js"></script>
   <script type="text/javascript" src="js/Maze.js"></script>
+  <script type="text/javascript" src="js/Events.js"></script>
 </head>
 <body>
   <div id="mazeDiv"></div>
 
   <script>
     Maze.setDimentions(10,10);
-    Maze.setOpenings({
+    Maze.setSettings({
       openings: [
         {x: 0, y: 0, doors: ['DOWN']},
-        {x: 0, y: 1, doors: ['UP']}
-      ]
+        {x: 0, y: 1, doors: ['UP']},
+        {x: 0, y: 1, doors: ['RIGHT']},
+        {x: 1, y: 1, doors: ['LEFT']},
+        {x: 1, y: 1, doors: ['DOWN']},
+        {x: 1, y: 2, doors: ['DOWN']},
+        {x: 1, y: 2, doors: ['UP']},
+        {x: 1, y: 3, doors: ['DOWN']},
+        {x: 1, y: 3, doors: ['UP']},
+        {x: 1, y: 4, doors: ['DOWN']},
+        {x: 1, y: 4, doors: ['UP']},
+        {x: 1, y: 5, doors: ['DOWN']},
+        {x: 1, y: 5, doors: ['UP']},
+        {x: 1, y: 6, doors: ['DOWN']},
+        {x: 1, y: 6, doors: ['UP']},
+        {x: 1, y: 7, doors: ['DOWN']},
+        {x: 1, y: 7, doors: ['UP']},
+        {x: 1, y: 8, doors: ['DOWN']},
+        {x: 1, y: 8, doors: ['UP']},
+        {x: 1, y: 9, doors: ['UP']},
+        {x: 1, y: 9, doors: ['RIGHT']},
+        {x: 2, y: 9, doors: ['LEFT']},
+        {x: 2, y: 9, doors: ['RIGHT']},
+        {x: 3, y: 9, doors: ['LEFT']},
+        {x: 3, y: 9, doors: ['RIGHT']},
+        {x: 4, y: 9, doors: ['LEFT']},
+        {x: 4, y: 9, doors: ['RIGHT']},
+        {x: 5, y: 9, doors: ['LEFT']},
+        {x: 5, y: 9, doors: ['RIGHT']},
+        {x: 6, y: 9, doors: ['LEFT']},
+        {x: 6, y: 9, doors: ['RIGHT']},
+        {x: 7, y: 9, doors: ['LEFT']},
+        {x: 7, y: 9, doors: ['RIGHT']},
+        {x: 8, y: 9, doors: ['LEFT']},
+        {x: 8, y: 9, doors: ['RIGHT']},
+        {x: 9, y: 9, doors: ['LEFT']}
+      ],
+      exit: {x: 9, y: 9}
     });
     Maze.create();
   </script>

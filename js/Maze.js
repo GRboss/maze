@@ -1,13 +1,16 @@
 var Maze = (function(){
   var _options = {};
+  var _maze = [];
+  var _movingObjects = [];
 
   var setDimentions = function(width, height) {
     _options.width = width;
     _options.height = height;
   };
 
-  var setOpenings = function(config) {
+  var setSettings = function(config) {
     _options.openings = config.openings;
+    _options.exit = config.exit;
   };
 
   var create = function() {
@@ -56,20 +59,115 @@ var Maze = (function(){
         room.create({
           x: j,
           y: i,
-          openingsOn: openings
+          openingsOn: openings,
+          isExit: (j===_options.exit.x && i===_options.exit.y ? true : false)
         });
+
         td = room.getElement();
+
+        _maze.push({
+          i: i,
+          j: j,
+          room: room,
+          td: td
+        });
+
         tr.appendChild(td);
       }
       table.appendChild(tr);
     }
     var divWrapper = document.getElementById('mazeDiv');
     divWrapper.appendChild(table);
+
+    // Moving Objects
+    var hero = new Hero();
+    hero.create({
+      x: 0,
+      y: 0,
+      health: 100,
+      maxX: _options.width-1,
+      maxY: _options.height-1
+    });
+    var td = getTdAt({x:0,y:0});
+    td.appendChild(hero.getElement());
+    _movingObjects.push(hero);
+  };
+
+  var turn = function(direction) {
+    for(var m=0; m<_movingObjects.length; m++) {
+      var object = _movingObjects[m];
+      switch (object.getType()) {
+        case 'Hero':
+          _goToNextPosition(direction,object);
+          break;
+      }
+    }
+  };
+
+  var _goToNextPosition = function(direction,movingObject) {
+    var currentPosition = movingObject.getPosition();
+    var nextPosition = null;
+    var room = getRoomAt(currentPosition);
+    var td = getTdAt(currentPosition);
+
+    if(moveAllowed(direction,room.openingsOn)) {
+      td.innerHTML = '';
+      switch (direction) {
+        case Utilities.directions.UP:
+          nextPosition = movingObject.moveUp();
+          break;
+        case Utilities.directions.DN:
+          nextPosition = movingObject.moveDown();
+          break;
+        case Utilities.directions.LT:
+          nextPosition = movingObject.moveLeft();
+          break;
+        case Utilities.directions.RT:
+          nextPosition = movingObject.moveRight();
+          break;
+      }
+
+      td = getTdAt(nextPosition);
+      td.appendChild(movingObject.getElement());
+    }
+  };
+
+  var getRoomAt = function(position) {
+    for(var i=0; i<_maze.length; i++) {
+      if(position.x === _maze[i].j && position.y === _maze[i].i) {
+        return _maze[i].room;
+      }
+    }
+    return null;
+  };
+
+  var getTdAt = function(position) {
+    for(var i=0; i<_maze.length; i++) {
+      if(position.x === _maze[i].j && position.y === _maze[i].i) {
+        return _maze[i].td;
+      }
+    }
+    return null;
+  };
+
+  var moveAllowed = function(direction,openingsOn) {
+    for(var i=0; i<openingsOn.length; i++) {
+      if(openingsOn[i] === direction) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  var getMaze = function() {
+    return _maze;
   };
 
   return {
     setDimentions: setDimentions,
     create: create,
-    setOpenings: setOpenings
+    setSettings: setSettings,
+    getMaze: getMaze,
+    turn: turn
   };
 })();
