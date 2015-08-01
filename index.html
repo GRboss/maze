@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Maze</title>
+  <link rel="stylesheet" type="text/css" href="css/maze.css">
+  <script type="text/javascript" src="js/Utilities.js"></script>
+  <script type="text/javascript" src="js/Room.js"></script>
+  <script type="text/javascript" src="js/MarbleRoom.js"></script>
+  <script type="text/javascript" src="js/DirtRoom.js"></script>
+  <script type="text/javascript" src="js/MudRoom.js"></script>
+  <script type="text/javascript" src="js/Maze.js"></script>
+</head>
+<body>
+  <div id="mazeDiv"></div>
+
+  <script>
+    Maze.setDimentions(10,10);
+    Maze.setOpenings({
+      openings: [
+        {x: 0, y: 0, doors: ['DOWN']},
+        {x: 0, y: 1, doors: ['UP']}
+      ]
+    });
+    Maze.create();
+  </script>
+</body>
+</html>

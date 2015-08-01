@@ -1,0 +1,38 @@
+table {
+  border-collapse: collapse;
+}
+
+.RoomCls {
+  border: 1px solid black;
+  width: 40px;
+  height: 40px;
+  box-sizing: border-box;
+}
+
+.MarbleCls {
+  background-color: #eee;
+}
+
+.DirtCls {
+  background-color: #ddd;
+}
+
+.MudCls {
+  background-color: #ccc;
+}
+
+.UPdoor {
+  border-top: 1px solid transparent;
+}
+
+.DOWNdoor {
+  border-bottom: 1px solid transparent;
+}
+
+.LEFTdoor {
+  border-left: 1px solid transparent;
+}
+
+.RIGHTdoor {
+  border-right: 1px solid transparent;
+}
