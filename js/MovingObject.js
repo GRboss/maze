@@ -59,7 +59,11 @@ var MovingObject = function() {
   };
 
   this.updateHealth = function(value) {
-    this.health = value;
+    this.health += (-1)*value;
+    if(this.health < 0) {
+      alert('Dead');
+    }
+    console.log(this.health);
   };
 
   this.getType = function() {

@@ -128,6 +128,9 @@ var Maze = (function(){
       }
 
       room = getRoomAt(nextPosition);
+      var difficalty = room.getDifficalty();
+      movingObject.updateHealth(difficalty);
+
       td = getTdAt(nextPosition);
       td.appendChild(movingObject.getElement());
 
