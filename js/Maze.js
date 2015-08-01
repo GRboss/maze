@@ -127,8 +127,13 @@ var Maze = (function(){
           break;
       }
 
+      room = getRoomAt(nextPosition);
       td = getTdAt(nextPosition);
       td.appendChild(movingObject.getElement());
+
+      if(room.exit) {
+        alert('You made it!');
+      }
     }
   };
 
