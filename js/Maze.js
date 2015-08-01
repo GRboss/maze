@@ -152,6 +152,11 @@ var Maze = (function(){
         case 'Hero':
           _goToNextPosition(direction,object);
           break;
+        case 'Campe':
+        case 'Demon':
+        case 'Empusa':
+          _makeRandomMove(object);
+          break;
       }
     }
   };
@@ -217,6 +222,35 @@ var Maze = (function(){
       }
     }
     return false;
+  };
+
+  var _makeRandomMove = function(movingObject) {
+    var currentPosition = movingObject.getPosition();
+    var nextPosition = null;
+    var room = getRoomAt(currentPosition);
+    var td = getTdAt(currentPosition);
+    var direction = room.openingsOn[Utilities.random(room.openingsOn.length)-1];
+
+    if(moveAllowed(direction,room.openingsOn)) {
+      td.innerHTML = '';
+      switch (direction) {
+        case Utilities.directions.UP:
+          nextPosition = movingObject.moveUp();
+          break;
+        case Utilities.directions.DN:
+          nextPosition = movingObject.moveDown();
+          break;
+        case Utilities.directions.LT:
+          nextPosition = movingObject.moveLeft();
+          break;
+        case Utilities.directions.RT:
+          nextPosition = movingObject.moveRight();
+          break;
+      }
+
+      td = getTdAt(nextPosition);
+      td.appendChild(movingObject.getElement());
+    }
   };
 
   var getMaze = function() {
