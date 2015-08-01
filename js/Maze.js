@@ -91,6 +91,58 @@ var Maze = (function(){
     var td = getTdAt({x:0,y:0});
     td.appendChild(hero.getElement());
     _movingObjects.push(hero);
+
+    var monster,x,y = null;
+    for(var i=0; i<10; i++) {
+      var number = Utilities.random(3);
+      switch (number) {
+        case 1:
+          do {
+            x = Utilities.random(_options.width)-1;
+            y = Utilities.random(_options.height)-1;
+          } while(x===0 && y===0);
+          monster = new Campe();
+          monster.create({
+            x: x,
+            y: y,
+            health: 70,
+            maxX: _options.width-1,
+            maxY: _options.height-1
+          });
+          break;
+        case 2:
+          do {
+            x = Utilities.random(_options.width)-1;
+            y = Utilities.random(_options.height)-1;
+          } while(x===0 && y===0);
+          monster = new Demon();
+          monster.create({
+            x: x,
+            y: y,
+            health: 80,
+            maxX: _options.width-1,
+            maxY: _options.height-1
+          });
+          break;
+        case 3:
+          do {
+            x = Utilities.random(_options.width)-1;
+            y = Utilities.random(_options.height)-1;
+          } while(x===0 && y===0);
+          monster = new Empusa();
+          monster.create({
+            x: x,
+            y: y,
+            health: 90,
+            maxX: _options.width-1,
+            maxY: _options.height-1
+          });
+          break;
+      }
+      td = getTdAt({x:x,y:y});
+      td.appendChild(monster.getElement());
+      _movingObjects.push(monster);
+    }
   };
 
   var turn = function(direction) {

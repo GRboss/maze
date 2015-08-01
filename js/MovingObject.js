@@ -60,10 +60,7 @@ var MovingObject = function() {
 
   this.updateHealth = function(value) {
     this.health += (-1)*value;
-    if(this.health < 0) {
-      alert('Dead');
-    }
-    console.log(this.health);
+    return this.health;
   };
 
   this.getType = function() {
@@ -78,7 +75,7 @@ var MovingObject = function() {
   };
 
   this.getElement = function() {
-    var el = document.createTextNode('H');
+    var el = document.createTextNode('MO');
     return el;
   };
 };
