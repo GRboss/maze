@@ -4,6 +4,8 @@ var Maze = (function(){
 	var _movingObjects = [];
 	var _occupiedPositions = [];
 	var _lastDirection = null;
+	var _fruitsActive = false;
+	var _fruits = [];
 
 	var setDimentions = function(width, height) {
 		_options.width = width;
@@ -193,6 +195,35 @@ var Maze = (function(){
 					_makeRandomMove(object);
 					break;
 			}
+		}
+		
+		var fruitRandomNumber = Utilities.random(1);
+		var fruit, td = null;
+		if(_fruitsActive === false && fruitRandomNumber === 1) {
+			_fruitsActive = true;
+			for(var i=0; i<10; i++) {
+				do {
+					x = Utilities.random(_options.width)-1;
+					y = Utilities.random(_options.height)-1;
+				} while(_isPositionIsOccupied({x:x,y:y}));
+				_addOccupiedPosition({x:x,y:y});
+				fruit = new Fruit();
+				fruit.setPosition({x:x,y:y});
+				td = getTdAt({x:x,y:y});
+				td.appendChild(fruit.getElement());
+				_fruits.push(fruit);
+			}
+		} else if(_fruitsActive === true && fruitRandomNumber === 1) {
+			_fruitsActive = false;
+			for(var i=0; i<_fruits.length; i++) {
+				var pos = _fruits[i].getPosition();
+				td = getTdAt(pos);
+				_removeOccupiedPosition(pos);
+				while (td.firstChild) {
+					td.removeChild(td.firstChild);
+				}
+			}
+			_fruits = [];
 		}
 	};
 
