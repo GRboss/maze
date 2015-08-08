@@ -467,6 +467,8 @@ var Maze = (function(){
 					td.removeChild(element);
 					if(moveAllowed(direction,room.openingsOn)) {
 						_shotTravel(shot,direction);
+					} else {
+						Shot.removeInstance();
 					}
 				},400);
 			}
