@@ -118,7 +118,7 @@ var Maze = (function(){
 		var td = getTdAt({x:0,y:0});
 		td.appendChild(hero.getElement());
 		_movingObjects.push(hero);
-		_addOccupiedPosition({x:0,y:0});
+		_addOccupiedPosition({x:0,y:0,type:'Hero'});
 		_createScoreRow(hero,0);
 
 		var monster,x,y = null;
@@ -130,7 +130,7 @@ var Maze = (function(){
 						x = Utilities.random(_options.width)-1;
 						y = Utilities.random(_options.height)-1;
 					} while(_isPositionIsOccupied({x:x,y:y}));
-					_addOccupiedPosition({x:x,y:y});
+					_addOccupiedPosition({x:x,y:y,type:'Monster'});
 					monster = new Campe();
 					monster.create({
 						x: x,
@@ -146,7 +146,7 @@ var Maze = (function(){
 						x = Utilities.random(_options.width)-1;
 						y = Utilities.random(_options.height)-1;
 					} while(_isPositionIsOccupied({x:x,y:y}));
-					_addOccupiedPosition({x:x,y:y});
+					_addOccupiedPosition({x:x,y:y,type:'Monster'});
 					monster = new Demon();
 					monster.create({
 						x: x,
@@ -162,7 +162,7 @@ var Maze = (function(){
 						x = Utilities.random(_options.width)-1;
 						y = Utilities.random(_options.height)-1;
 					} while(_isPositionIsOccupied({x:x,y:y}));
-					_addOccupiedPosition({x:x,y:y});
+					_addOccupiedPosition({x:x,y:y,type:'Monster'});
 					monster = new Empusa();
 					monster.create({
 						x: x,
@@ -206,7 +206,7 @@ var Maze = (function(){
 					x = Utilities.random(_options.width)-1;
 					y = Utilities.random(_options.height)-1;
 				} while(_isPositionIsOccupied({x:x,y:y}));
-				_addOccupiedPosition({x:x,y:y});
+				_addOccupiedPosition({x:x,y:y,type:'Fruit'});
 				fruit = new Fruit();
 				fruit.setPosition({x:x,y:y});
 				td = getTdAt({x:x,y:y});
@@ -254,21 +254,55 @@ var Maze = (function(){
 			/**
 			 * Check if a monster is there
 			 */
-			if(_checkIfMonsterThere(nextPosition)) {
+			if(checkIfSomethingIsThere(nextPosition,'Monster')) {
 				movingObject.kill();
 			} else {
+				if(checkIfSomethingIsThere(nextPosition,'Fruit')) {
+					var fruit = _getFruitAt(nextPosition);
+					var power = fruit.getPower();
+					movingObject.updateHealth(power);
+					_removeFruitAt(nextPosition);
+				}
+				
 				room = getRoomAt(nextPosition);
 				var difficalty = room.getDifficalty();
 				movingObject.updateHealth(difficalty);
 
 				td = getTdAt(nextPosition);
 				td.appendChild(movingObject.getElement());
+				nextPosition.type = 'Hero';
 				_addOccupiedPosition(nextPosition);
 				_updateMovingObjectScoreBoardEntry(movingObject);
 
 				if(room.exit) {
 					alert('You made it!');
 				}
+			}
+		}
+	};
+	
+	var _getFruitAt = function(position) {
+		for(var i=0; i<_fruits.length; i++) {
+			var pos = _fruits[i].getPosition();
+			if(pos.x === position.x && pos.y === position.y) {
+				return _fruits[i];
+			}
+		}
+		return false;
+	};
+	
+	var _removeFruitAt = function(position) {
+		var td = null;
+		for(var i=0; i<_fruits.length; i++) {
+			var pos = _fruits[i].getPosition();
+			if(pos.x === position.x && pos.y === position.y) {
+				_fruits.splice(i,1);
+				td = getTdAt(pos);
+				_removeOccupiedPosition(pos);
+				while (td.firstChild) {
+					td.removeChild(td.firstChild);
+				}
+				break;
 			}
 		}
 	};
@@ -337,14 +371,17 @@ var Maze = (function(){
 				} else {
 					td = getTdAt(nextPosition);
 					td.appendChild(movingObject.getElement());
+					nextPosition.type = 'Monster';
 					_addOccupiedPosition(nextPosition);
 			}
 		}
 	};
 
-	var _checkIfMonsterThere = function(position) {
+	var checkIfSomethingIsThere = function(position,type) {
 		for(var i=1; i<_occupiedPositions.length; i++) {
-			if(_occupiedPositions[i].x === position.x && _occupiedPositions[i].y === position.y) {
+			if(_occupiedPositions[i].x === position.x && 
+				_occupiedPositions[i].y === position.y && 
+				_occupiedPositions[i].type === type) {
 				return true;
 			}
 		}
@@ -402,7 +439,7 @@ var Maze = (function(){
 		if(nextPosition === false) {
 			
 		} else {
-			if(_checkIfMonsterThere(nextPosition)) {
+			if(checkIfSomethingIsThere(nextPosition,'Monster')) {
 				_shotHitsMonster(shot,nextPosition);
 			} else {
 				var room = getRoomAt(nextPosition);

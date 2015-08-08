@@ -5,4 +5,4 @@ MudRoom = function() {
 MudRoom.prototype = Object.create(new Room());
 
 MudRoom.prototype.type = 'Mud';
-MudRoom.prototype.difficalty = 3;
+MudRoom.prototype.difficalty = -3;

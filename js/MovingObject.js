@@ -73,7 +73,7 @@ var MovingObject = function() {
 	};
 
 	this.updateHealth = function(value) {
-		this.health += (-1)*value;
+		this.health +=value;
 		console.log(this.health);
 		if(this.health <= 0) {
 			this.kill();
