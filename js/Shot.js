@@ -1,18 +1,42 @@
-var Shot = function() {
+var Shot = (function () {
+	var instance;
+ 
+	function createInstance(config) {
+		var shot = function() {
 
-};
+		};
 
-Shot.prototype = Object.create(new MovingObject());
+		shot.prototype = Object.create(new MovingObject());
 
-Shot.prototype.type = 'Shot';
+		shot.prototype.type = 'Shot';
 
-Shot.prototype.hurtForce = -20;
+		shot.prototype.hurtForce = -20;
 
-Shot.prototype.getHurtForce = function() {
-	return this.hurtForce;
-};
+		shot.prototype.getHurtForce = function() {
+			return this.hurtForce;
+		};
 
-Shot.prototype.getElement = function() {
-	var el = document.createTextNode('\u2022');
-	return el;
-};
+		shot.prototype.getElement = function() {
+			var el = document.createTextNode('\u2022');
+			return el;
+		};
+		
+		var obj = new shot();
+		obj.create(config);
+		
+		return obj;
+	}
+ 
+	return {
+		getInstance: function (config) {
+			if (!instance) {
+				instance = createInstance(config);
+				return instance;
+			}
+			return false;
+		},
+		removeInstance: function() {
+			instance = null;
+		}
+	};
+})();

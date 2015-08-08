@@ -412,16 +412,7 @@ var Maze = (function(){
 		var room = getRoomAt(currentPosition);
 		var td = getTdAt(currentPosition);
 		var shootingDirection = null;
-		var shot = new Shot();
-		
-		if(moveAllowed(_lastDirection,room.openingsOn)) {
-			shootingDirection = _lastDirection;
-		} else {
-			shootingDirection = room.openingsOn[Utilities.random(room.openingsOn.length)-1];
-		}
-		console.log(shootingDirection);
-		
-		shot.create({
+		var shot = Shot.getInstance({
 			x: currentPosition.x,
 			y: currentPosition.y,
 			health: 100,
@@ -430,8 +421,18 @@ var Maze = (function(){
 			number: null
 		});
 		
-		if(moveAllowed(shootingDirection,room.openingsOn)) {
-			_shotTravel(shot,shootingDirection);
+		if(shot !== false) {
+			if(moveAllowed(_lastDirection,room.openingsOn)) {
+				shootingDirection = _lastDirection;
+			} else {
+				shootingDirection = room.openingsOn[Utilities.random(room.openingsOn.length)-1];
+			}
+
+			if(moveAllowed(shootingDirection,room.openingsOn)) {
+				_shotTravel(shot,shootingDirection);
+			} else {
+				Shot.removeInstance();
+			}
 		}
 	};
 	
@@ -452,10 +453,11 @@ var Maze = (function(){
 		}
 		
 		if(nextPosition === false) {
-			
+			Shot.removeInstance();
 		} else {
 			if(checkIfSomethingIsThere(nextPosition,'Monster')) {
 				_shotHitsMonster(shot,nextPosition);
+				Shot.removeInstance();
 			} else {
 				var room = getRoomAt(nextPosition);
 				var td = getTdAt(nextPosition);

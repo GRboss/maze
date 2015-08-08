@@ -9,7 +9,7 @@ var Utilities = {
 		return Math.floor(Math.random() * max) + 1;
 	}
 };
-
+/*
 if (typeof document.getElementsByClassName === "undefined") {
 	document.getElementsByClassName = function(className) {
 		var hasClassName = new RegExp("(?:^|\\s)" + className + "(?:$|\\s)");
@@ -38,3 +38,4 @@ function removeClass(ele,cls) {
 			ele.className=ele.className.replace(reg,' ');
 	}
 }
+*/
