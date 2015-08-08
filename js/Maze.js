@@ -2,6 +2,7 @@ var Maze = (function(){
   var _options = {};
   var _maze = [];
   var _movingObjects = [];
+  var _occupiedPositions = [];
 
   var setDimentions = function(width, height) {
     _options.width = width;
@@ -12,6 +13,27 @@ var Maze = (function(){
     _options.openings = config.openings;
     _options.exit = config.exit;
   };
+
+  var _isPositionIsOccupied = function(obj) {
+    for(var i=0; i<_occupiedPositions.length; i++) {
+      if(_occupiedPositions[i].x === obj.x && _occupiedPositions[i].y === obj.y) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  var _addOccupiedPosition = function(obj) {
+    _occupiedPositions.push(obj);
+  }
+
+  var _removeOccupiedPosition = function(obj) {
+    for(var i=0; i<_occupiedPositions.length; i++) {
+      if(_occupiedPositions[i].x === obj.x && _occupiedPositions[i].y === obj.y) {
+        _occupiedPositions.splice(i, 1);
+      }
+    }
+  }
 
   var create = function() {
     var table = document.createElement('table');
@@ -91,6 +113,7 @@ var Maze = (function(){
     var td = getTdAt({x:0,y:0});
     td.appendChild(hero.getElement());
     _movingObjects.push(hero);
+    _addOccupiedPosition({x:0,y:0});
 
     var monster,x,y = null;
     for(var i=0; i<10; i++) {
@@ -100,7 +123,8 @@ var Maze = (function(){
           do {
             x = Utilities.random(_options.width)-1;
             y = Utilities.random(_options.height)-1;
-          } while(x===0 && y===0);
+          } while(_isPositionIsOccupied({x:x,y:y}));
+          _addOccupiedPosition({x:x,y:y});
           monster = new Campe();
           monster.create({
             x: x,
@@ -114,7 +138,8 @@ var Maze = (function(){
           do {
             x = Utilities.random(_options.width)-1;
             y = Utilities.random(_options.height)-1;
-          } while(x===0 && y===0);
+          } while(_isPositionIsOccupied({x:x,y:y}));
+          _addOccupiedPosition({x:x,y:y});
           monster = new Demon();
           monster.create({
             x: x,
@@ -128,7 +153,8 @@ var Maze = (function(){
           do {
             x = Utilities.random(_options.width)-1;
             y = Utilities.random(_options.height)-1;
-          } while(x===0 && y===0);
+          } while(_isPositionIsOccupied({x:x,y:y}));
+          _addOccupiedPosition({x:x,y:y});
           monster = new Empusa();
           monster.create({
             x: x,
@@ -184,15 +210,22 @@ var Maze = (function(){
           break;
       }
 
-      room = getRoomAt(nextPosition);
-      var difficalty = room.getDifficalty();
-      movingObject.updateHealth(difficalty);
+      /**
+       * Check if a monster is there
+       */
+      if(_checkIfMonsterThere(nextPosition)) {
+        movingObject.kill();
+      } else {
+        room = getRoomAt(nextPosition);
+        var difficalty = room.getDifficalty();
+        movingObject.updateHealth(difficalty);
 
-      td = getTdAt(nextPosition);
-      td.appendChild(movingObject.getElement());
+        td = getTdAt(nextPosition);
+        td.appendChild(movingObject.getElement());
 
-      if(room.exit) {
-        alert('You made it!');
+        if(room.exit) {
+          alert('You made it!');
+        }
       }
     }
   };
@@ -248,9 +281,29 @@ var Maze = (function(){
           break;
       }
 
-      td = getTdAt(nextPosition);
-      td.appendChild(movingObject.getElement());
+      /**
+       * Check if hero is there
+       */
+      var heroPosition = _movingObjects[0].getPosition();
+      if(heroPosition.x === nextPosition.x && heroPosition.y === nextPosition.y) {
+        /**
+         * If yes, kill him
+         */
+        _movingObjects[0].kill();
+      } else {
+        td = getTdAt(nextPosition);
+        td.appendChild(movingObject.getElement());
     }
+    }
+  };
+
+  var _checkIfMonsterThere = function(position) {
+    for(var i=1; i<_occupiedPositions.length; i++) {
+      if(_occupiedPositions[i].x === position.x && _occupiedPositions[i].y === position.y) {
+        return true;
+      }
+    }
+    return false;
   };
 
   var getMaze = function() {

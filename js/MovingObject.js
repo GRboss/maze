@@ -73,6 +73,10 @@ var MovingObject = function() {
       y: this.y
     };
   };
+  
+  this.kill = function() {
+    alert("I'm killed");  
+  };
 
   this.getElement = function() {
     var el = document.createTextNode('MO');
