@@ -207,7 +207,15 @@ var Maze = (function(){
 					y = Utilities.random(_options.height)-1;
 				} while(_isPositionIsOccupied({x:x,y:y}));
 				_addOccupiedPosition({x:x,y:y,type:'Fruit'});
-				fruit = new Fruit();
+				var number = Utilities.random(2);
+				switch(number) {
+					case 1:
+						fruit = new Apple();
+						break;
+					case 2:
+						fruit = new Banana();
+						break;
+				}
 				fruit.setPosition({x:x,y:y});
 				td = getTdAt({x:x,y:y});
 				td.appendChild(fruit.getElement());
