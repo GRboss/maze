@@ -5,4 +5,4 @@ MarbleRoom = function() {
 MarbleRoom.prototype = Object.create(new Room());
 
 MarbleRoom.prototype.type = 'Marble';
-MarbleRoom.prototype.difficalty = 10;
+MarbleRoom.prototype.difficalty = 1;

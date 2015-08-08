@@ -361,7 +361,7 @@ var Maze = (function(){
 			
 		} else {
 			if(_checkIfMonsterThere(nextPosition)) {
-				alert('Hit!');
+				_shotHitsMonster(shot,nextPosition);
 			} else {
 				var td = getTdAt(nextPosition);
 				var element = shot.getElement();
@@ -370,6 +370,28 @@ var Maze = (function(){
 					td.removeChild(element);
 					_shotTravel(shot,direction);
 				},400);
+			}
+		}
+	};
+	
+	var _shotHitsMonster = function(shot,position) {
+		console.log("Hit!");
+		for(var i=1; i<_movingObjects.length; i++) {
+			var pos = _movingObjects[i].getPosition();
+			if(pos.x === position.x && pos.y === position.y) {
+				var td = getTdAt(position);
+				var hurtForce = shot.getHurtForce();
+				var health = _movingObjects[i].updateHealth(hurtForce);
+				
+				if(health <= 0) {
+					while (td.firstChild) {
+						td.removeChild(td.firstChild);
+					}
+					_movingObjects.splice(i,1);
+					_removeOccupiedPosition(position);
+				}
+				
+				break;
 			}
 		}
 	};
