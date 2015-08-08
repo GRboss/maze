@@ -29,3 +29,5 @@ Finally there are 2 types of Fruits that appear and disappear randomly:
 
 Wheather the Hero or a Monster gets into a room with a Fruit it consumes it and his health increases.
 
+For Monster, Floor and Fruit types prototypical inheritance is used.
+The Shot class applies the singleton pattern.
