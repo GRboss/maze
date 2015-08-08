@@ -347,7 +347,9 @@ var Maze = (function(){
 			number: null
 		});
 		
-		_shotTravel(shot,shootingDirection);
+		if(moveAllowed(shootingDirection,room.openingsOn)) {
+			_shotTravel(shot,shootingDirection);
+		}
 	};
 	
 	var _shotTravel = function(shot,direction) {
@@ -372,12 +374,15 @@ var Maze = (function(){
 			if(_checkIfMonsterThere(nextPosition)) {
 				_shotHitsMonster(shot,nextPosition);
 			} else {
+				var room = getRoomAt(nextPosition);
 				var td = getTdAt(nextPosition);
 				var element = shot.getElement();
 				td.appendChild(element);
 				setTimeout(function(){
 					td.removeChild(element);
-					_shotTravel(shot,direction);
+					if(moveAllowed(direction,room.openingsOn)) {
+						_shotTravel(shot,direction);
+					}
 				},400);
 			}
 		}

@@ -13,6 +13,6 @@ Shot.prototype.getHurtForce = function() {
 };
 
 Shot.prototype.getElement = function() {
-	var el = document.createTextNode('S');
+	var el = document.createTextNode('\u2022');
 	return el;
 };
