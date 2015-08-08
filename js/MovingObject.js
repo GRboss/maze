@@ -1,4 +1,5 @@
 var MovingObject = function() {
+	this.id = null;
 	this.x = null;
 	this.y = null;
 	this.type = 'MovingObject';
@@ -12,6 +13,11 @@ var MovingObject = function() {
 		this.health = config.health;
 		this.maxX = config.maxX;
 		this.maxY = config.maxY;
+		this.id = config.number;
+	};
+	
+	this.getId = function() {
+		return this.id;
 	};
 
 	this.moveUp = function() {
@@ -72,6 +78,10 @@ var MovingObject = function() {
 		if(this.health <= 0) {
 			this.kill();
 		}
+		return this.health;
+	};
+	
+	this.getHealth = function() {
 		return this.health;
 	};
 

@@ -26,7 +26,7 @@ var Maze = (function(){
 
 	var _addOccupiedPosition = function(obj) {
 		_occupiedPositions.push(obj);
-	}
+	};
 
 	var _removeOccupiedPosition = function(obj) {
 		for(var i=0; i<_occupiedPositions.length; i++) {
@@ -40,6 +40,7 @@ var Maze = (function(){
 		var table = document.createElement('table');
 		table.setAttribute('cellpadding','0');
 		table.setAttribute('cellspacing','0');
+		table.className = 'mazeTable'
 		for(var i=0; i<_options.height; i++){
 			var tr = document.createElement('tr');
 			for(var j=0; j<_options.width; j++) {
@@ -109,12 +110,14 @@ var Maze = (function(){
 			y: 0,
 			health: 100,
 			maxX: _options.width-1,
-			maxY: _options.height-1
+			maxY: _options.height-1,
+			number: 0
 		});
 		var td = getTdAt({x:0,y:0});
 		td.appendChild(hero.getElement());
 		_movingObjects.push(hero);
 		_addOccupiedPosition({x:0,y:0});
+		_createScoreRow(hero,0);
 
 		var monster,x,y = null;
 		for(var i=0; i<10; i++) {
@@ -132,7 +135,8 @@ var Maze = (function(){
 						y: y,
 						health: 70,
 						maxX: _options.width-1,
-						maxY: _options.height-1
+						maxY: _options.height-1,
+						number: i
 					});
 					break;
 				case 2:
@@ -147,7 +151,8 @@ var Maze = (function(){
 						y: y,
 						health: 80,
 						maxX: _options.width-1,
-						maxY: _options.height-1
+						maxY: _options.height-1,
+						number: i
 					});
 					break;
 				case 3:
@@ -162,13 +167,15 @@ var Maze = (function(){
 						y: y,
 						health: 90,
 						maxX: _options.width-1,
-						maxY: _options.height-1
+						maxY: _options.height-1,
+						number: i
 					});
 					break;
 			}
 			td = getTdAt({x:x,y:y});
 			td.appendChild(monster.getElement());
 			_movingObjects.push(monster);
+			_createScoreRow(monster,i);
 		}
 	};
 
@@ -226,6 +233,7 @@ var Maze = (function(){
 				td = getTdAt(nextPosition);
 				td.appendChild(movingObject.getElement());
 				_addOccupiedPosition(nextPosition);
+				_updateMovingObjectScoreBoardEntry(movingObject);
 
 				if(room.exit) {
 					alert('You made it!');
@@ -335,7 +343,8 @@ var Maze = (function(){
 			y: currentPosition.y,
 			health: 100,
 			maxX: _options.width-1,
-			maxY: _options.height-1
+			maxY: _options.height-1,
+			number: null
 		});
 		
 		_shotTravel(shot,shootingDirection);
@@ -375,13 +384,13 @@ var Maze = (function(){
 	};
 	
 	var _shotHitsMonster = function(shot,position) {
-		console.log("Hit!");
 		for(var i=1; i<_movingObjects.length; i++) {
 			var pos = _movingObjects[i].getPosition();
 			if(pos.x === position.x && pos.y === position.y) {
 				var td = getTdAt(position);
 				var hurtForce = shot.getHurtForce();
 				var health = _movingObjects[i].updateHealth(hurtForce);
+				_updateMovingObjectScoreBoardEntry(_movingObjects[i]);
 				
 				if(health <= 0) {
 					while (td.firstChild) {
@@ -394,6 +403,41 @@ var Maze = (function(){
 				break;
 			}
 		}
+	};
+	
+	var _createScoreRow = function(movingObject,number) {
+		var type = movingObject.getType();
+		var tdName = document.createElement('td');
+		var tdScore = document.createElement('td');
+		var row = document.createElement('tr');
+		var scoreTable = document.getElementById('healthTable');
+		var score = movingObject.getHealth();
+		score = document.createTextNode(score);
+		tdName.className = 'movingObjectScoreName';
+		tdScore.className = 'movingObjectScoreScore';
+		tdScore.appendChild(score);
+		var name = '';
+		
+		if(type === 'Hero') {
+			name = document.createTextNode(type);
+			tdScore.setAttribute('id',type+'_'+number);
+		} else {
+			name = document.createTextNode(movingObject.getType()+' '+(number+1));
+			tdScore.setAttribute('id',type+'_'+number);
+		}
+		tdName.appendChild(name);
+		
+		row.appendChild(tdName);
+		row.appendChild(tdScore);
+		
+		scoreTable.tBodies[0].appendChild(row);
+	};
+	
+	var _updateMovingObjectScoreBoardEntry = function(object) {
+		var type = object.getType();
+		var id = object.getId();
+		var td = document.getElementById(type+'_'+id);
+		td.childNodes[0].nodeValue = object.getHealth();
 	};
 
 	return {

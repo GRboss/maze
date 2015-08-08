@@ -10,9 +10,8 @@ var Utilities = {
 	}
 };
 
-/*if (document.getElementsByClassName == undefined) {
-	document.getElementsByClassName = function(className)
-	{
+if (typeof document.getElementsByClassName === "undefined") {
+	document.getElementsByClassName = function(className) {
 		var hasClassName = new RegExp("(?:^|\\s)" + className + "(?:$|\\s)");
 		var allElements = document.getElementsByTagName("*");
 		var results = [];
@@ -26,5 +25,16 @@ var Utilities = {
 		}
 
 		return results;
+	};
+}
+
+function hasClass(ele,cls) {
+	return ele.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
+}
+
+function removeClass(ele,cls) {
+	if (hasClass(ele,cls)) {
+			var reg = new RegExp('(\\s|^)'+cls+'(\\s|$)');
+			ele.className=ele.className.replace(reg,' ');
 	}
-}*/
+}

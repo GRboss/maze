@@ -1,4 +1,4 @@
-table {
+.mazeTable {
     border-collapse: collapse;
 }
 
@@ -35,4 +35,16 @@ table {
 
 .RIGHTdoor {
     border-right: 1px solid transparent;
+}
+
+.dock {
+    width: 100%;
+}
+
+.dockTd {
+    width: 50%;
+}
+
+.movingObjectScoreScore {
+    text-align: right;
 }
