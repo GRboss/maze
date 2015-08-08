@@ -197,7 +197,7 @@ var Maze = (function(){
 			}
 		}
 		
-		var fruitRandomNumber = Utilities.random(1);
+		var fruitRandomNumber = Utilities.random(3);
 		var fruit, td = null;
 		if(_fruitsActive === false && fruitRandomNumber === 1) {
 			_fruitsActive = true;
@@ -369,6 +369,13 @@ var Maze = (function(){
 					 */
 					_movingObjects[0].kill();
 				} else {
+					if(checkIfSomethingIsThere(nextPosition,'Fruit')) {
+						var fruit = _getFruitAt(nextPosition);
+						var power = fruit.getPower();
+						movingObject.updateHealth(power);
+						_removeFruitAt(nextPosition);
+					}
+					
 					td = getTdAt(nextPosition);
 					td.appendChild(movingObject.getElement());
 					nextPosition.type = 'Monster';
