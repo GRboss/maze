@@ -1,13 +1,13 @@
 var Utilities = {
-  directions: {
-    UP: 'UP',
-    DN: 'DOWN',
-    LT: 'LEFT',
-    RT: 'RIGHT'
-  },
-  random: function(max) {
-    return Math.floor(Math.random() * max) + 1;
-  }
+	directions: {
+		UP: 'UP',
+		DN: 'DOWN',
+		LT: 'LEFT',
+		RT: 'RIGHT'
+	},
+	random: function(max) {
+		return Math.floor(Math.random() * max) + 1;
+	}
 };
 
 /*if (document.getElementsByClassName == undefined) {
@@ -22,7 +22,7 @@ var Utilities = {
 			var elementClass = element.className;
 			if (elementClass && elementClass.indexOf(className) != -1 && hasClassName.test(elementClass)) {
 				results.push(element);
-      }
+			}
 		}
 
 		return results;
