@@ -192,7 +192,7 @@ var Maze = (function(){
 				case 'Campe':
 				case 'Demon':
 				case 'Empusa':
-					_makeRandomMove(object);
+					makeRandomMonsterMove(object);
 					break;
 			}
 		}
@@ -334,7 +334,7 @@ var Maze = (function(){
 		return false;
 	};
 
-	var _makeRandomMove = function(movingObject) {
+	var makeRandomMonsterMove = function(movingObject) {
 		var currentPosition = movingObject.getPosition();
 		var nextPosition = null;
 		var room = getRoomAt(currentPosition);
@@ -473,6 +473,8 @@ var Maze = (function(){
 					_removeOccupiedPosition(position);
 				}
 				
+				moveAllMonsters();
+				
 				break;
 			}
 		}
@@ -511,6 +513,19 @@ var Maze = (function(){
 		var id = object.getId();
 		var td = document.getElementById(type+'_'+id);
 		td.childNodes[0].nodeValue = object.getHealth();
+	};
+	
+	var moveAllMonsters = function() {
+		for(var m=0; m<_movingObjects.length; m++) {
+			var object = _movingObjects[m];
+			switch (object.getType()) {
+				case 'Campe':
+				case 'Demon':
+				case 'Empusa':
+					makeRandomMonsterMove(object);
+					break;
+			}
+		}
 	};
 
 	return {
